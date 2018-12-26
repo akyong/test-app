@@ -2,10 +2,7 @@ package test.app;
 
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.core.type.Argument;
-import io.micronaut.http.HttpHeaders;
-import io.micronaut.http.HttpRequest;
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.HttpStatus;
+import io.micronaut.http.*;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.runtime.server.EmbeddedServer;
@@ -55,7 +52,7 @@ public class StudentControllerTest {
     public void supplyAnInvalidOrderTriggersValidationFailure() {
         thrown.expect(HttpClientResponseException.class);
 //        thrown.expect(hasProperty("response", hasProperty("status", is(HttpStatus.BAD_REQUEST))));
-        thrown.expect(hasProperty("response", hasProperty("status", is(HttpStatus.NOT_FOUND))));
+        thrown.expect(hasProperty("response", hasProperty("status", is(HttpStatus.BAD_REQUEST))));
         client.toBlocking().exchange(HttpRequest.GET("/student/list?order=foo"));
     }
 
@@ -71,25 +68,24 @@ public class StudentControllerTest {
     public void testStudentCrudOperations() {
 
         List<Long> studentIds = new ArrayList<>(); //list tampung id
-        Date skrg = new Date(); //membuat tanggal skrg
-
-        HttpRequest request = HttpRequest.POST("/student", new StudentSaveCommand("Bobby","S. Kom", 25)); // <3>
-        HttpResponse response = client.toBlocking().exchange(request);
+//        Date skrg = new Date(); //membuat tanggal skrg
+//
+        HttpRequest request = HttpRequest.POST("/student/create", new StudentSaveCommand("Bobby","S. Kom", 25)); // <3>
+        HttpResponse response = client.toBlocking().exchange(((MutableHttpRequest) request).contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE));
         studentIds.add(entityId(response));
         assertEquals(HttpStatus.CREATED, response.getStatus());
+
+        request = HttpRequest.POST("/student/create", new StudentSaveCommand("Akiong","M. Kom",27)); // <3>
+        response = client.toBlocking().exchange(((MutableHttpRequest) request).contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        assertEquals(HttpStatus.CREATED, response.getStatus());
+        Long id = entityId(response);
+        studentIds.add(id);
 //
-//        request = HttpRequest.POST("/stuent", new StudentSaveCommand("Akiong","M. Kom",27,skrg)); // <3>
-//        response = client.toBlocking().exchange(request);
-//        assertEquals(HttpStatus.CREATED, response.getStatus());
-//        Long id = entityId(response);
-//        studentIds.add(id);
-//
-//        request = HttpRequest.GET("/student/"+id);
-//        Student student = client.toBlocking().retrieve(request, Student.class); // <4>
-//
-//        assertEquals("Bobby", student.getFirstName());
-//
-//        request = HttpRequest.PUT("/student", new StudentUpdateCommand(id, "Bobby","S.Kom,M.Kom",28,skrg));
+        request = HttpRequest.GET("/student/"+id);
+        Student student = client.toBlocking().retrieve(request, Student.class); // <4>
+        assertEquals("Akiong", student.getFirstName());
+
+//        request = HttpRequest.PUT("/student", new StudentUpdateCommand(id, "Bobby","S.Kom,M.Kom",28));
 //        response = client.toBlocking().exchange(request);  // <5>
 //
 //        assertEquals(HttpStatus.NO_CONTENT, response.getStatus());

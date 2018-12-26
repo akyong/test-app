@@ -13,7 +13,7 @@ public class StudentGroup {
         this.group = group;
     }
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)/**/
     private Long id;
 
     @ManyToOne

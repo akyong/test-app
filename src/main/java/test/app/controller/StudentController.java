@@ -2,6 +2,7 @@ package test.app.controller;
 
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 import io.micronaut.validation.Validated;
 import test.app.command.StudentSaveCommand;
@@ -15,7 +16,7 @@ import java.net.URI;
 import java.util.List;
 
 @Validated
-@Controller("student")
+@Controller("/student")
 public class StudentController {
     protected final StudentRepository studentRepository;
 
@@ -47,11 +48,17 @@ public class StudentController {
 
     @Get(value = "/list{?args*}")
     public List<Student> list(@Valid SortingAndOrderArguments args) {
+        System.out.println("-------------aaa------");
         return studentRepository.findAll(args);
     }
 
-    @Post("/")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Post("/create")
     public HttpResponse<Student> save(@Body @Valid StudentSaveCommand command) {
+        System.out.println("firstname = "+command.getFirstName());
+        System.out.println("lastname = "+command.getLastName());
+        System.out.println("gae = "+command.getAge());
+
         Student student = studentRepository.save(
                 command.getFirstName(),
                 command.getLastName(),
@@ -61,6 +68,11 @@ public class StudentController {
         return HttpResponse
                 .created(student)
                 .headers(headers -> headers.location(location(student.getId())));
+//        System.out.println("hasil = "+HttpResponse
+//                .created(student)
+//                .headers(headers -> headers.location(location(student.getId()))));
+
+
     }
 
     @Delete("/{id}")

@@ -1,6 +1,9 @@
 micronaut:
     application:
         name: test-app
+    http:
+        client:
+            logger-name: mylogger
 
 datasources:
     default:

@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ public class StudentRepositoryImp implements StudentRepository {
     @PersistenceContext
     private EntityManager entityManager;
     private final ApplicationConfiguration applicationConfiguration;
-    private final static List<String> VALID_PROPERTY_NAMES = Arrays.asList("id", "name");
+    private final static List<String> VALID_PROPERTY_NAMES = Arrays.asList("id", "firstName","lastName","age");
 
     public StudentRepositoryImp(@CurrentSession EntityManager entityManager, ApplicationConfiguration applicationConfiguration) {
         this.entityManager = entityManager;
@@ -37,8 +38,8 @@ public class StudentRepositoryImp implements StudentRepository {
 
     @Override
     @Transactional
-    public Student save(@NotBlank String firstName, @NotBlank String lastName, @NotBlank int age) {
-        Student student = new Student();
+    public Student save(@NotBlank String firstName, @NotBlank String lastName,@Positive int age) {
+        Student student = new Student(firstName,lastName,age);
         entityManager.persist(student);
         return student;
     }
@@ -51,7 +52,7 @@ public class StudentRepositoryImp implements StudentRepository {
 
     @Override
     @Transactional
-    public int update(@NotNull Long id, @NotBlank String firstName, @NotBlank String lastName, @NotNull int age) {
+    public int update(@NotNull Long id, @NotBlank String firstName, @NotBlank String lastName, int age) {
         return entityManager.createQuery(
                 "UPDATE Student g SET firstName = :firstName," +
                         "lastName = :lastName," +

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,8 +33,8 @@ public class Student {
     @Column(name = "lastName",nullable = false)
     private String lastName;
 
-    @NotNull
-    @Column(name = "age",nullable = false)
+    @Positive
+    @Column(name = "age")
     private int age;
 
 //    @NotNull

@@ -1,6 +1,7 @@
 package test.app.command;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.Date;
 
@@ -11,8 +12,7 @@ public class StudentSaveCommand {
 
     @NotBlank
     private String lastName;
-
-    @NotBlank
+    
     private int age;
 
 //    @NotBlank
@@ -23,6 +23,7 @@ public class StudentSaveCommand {
     public StudentSaveCommand(String firstName, String lastName, int age) {
         this.firstName = firstName;
         this.lastName = lastName;
+        System.out.println("age  ==  "+age);
         this.age = age;
 //        this.birthday = birthday;
     }

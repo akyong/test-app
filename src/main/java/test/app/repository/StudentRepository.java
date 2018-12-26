@@ -11,11 +11,11 @@ import java.util.Optional;
 public interface StudentRepository {
     Optional<Student> findById(@NotNull Long id);
 
-    Student save(@NotBlank String firstName, String lastName, int age);
+    Student save(@NotBlank String firstName,@NotBlank String lastName, int age);
 
     void deleteById(@NotNull Long id);
 
-    int update(@NotNull Long id, @NotBlank String firstName, @NotBlank String lastName, @NotNull int age);
+    int update(@NotNull Long id, @NotBlank String firstName, @NotBlank String lastName, int age);
 
     List<Student> findAll(@NotNull SortingAndOrderArguments args);
 
