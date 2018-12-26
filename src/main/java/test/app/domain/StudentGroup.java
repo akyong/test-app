@@ -16,10 +16,12 @@ public class StudentGroup {
     @GeneratedValue(strategy = GenerationType.AUTO)/**/
     private Long id;
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 
     public void setId(Long id) {

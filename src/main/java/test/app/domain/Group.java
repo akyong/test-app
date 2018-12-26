@@ -37,9 +37,8 @@ public class Group {
     @Column(name = "description")
     private String description;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "group")
-    private Set<StudentGroup> studentGroups = new HashSet<>();
+    @OneToOne(cascade =  CascadeType.ALL,mappedBy = "student")
+    private StudentGroup studentGroups;
 
     public Long getId() {
         return id;
@@ -73,11 +72,11 @@ public class Group {
         return description;
     }
 
-    public Set<StudentGroup> getStudentGroups() {
+    public StudentGroup getStudentGroups() {
         return studentGroups;
     }
 
-    public void setStudentGroups(Set<StudentGroup> studentGroups) {
+    public void setStudentGroups(StudentGroup studentGroups) {
         this.studentGroups = studentGroups;
     }
 

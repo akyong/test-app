@@ -12,47 +12,48 @@ public class StudentSaveCommand {
 
     @NotBlank
     private String lastName;
-    
+
+    @Positive
     private int age;
 
-//    @NotBlank
-//    private Date birthday;
+    @NotNull
+    private Date birthday;
 
     public StudentSaveCommand() {}
 
-    public StudentSaveCommand(String firstName, String lastName, int age) {
+    public StudentSaveCommand(String firstName, String lastName, int age, Date birthday) {
         this.firstName = firstName;
         this.lastName = lastName;
         System.out.println("age  ==  "+age);
         this.age = age;
-//        this.birthday = birthday;
+        this.birthday = birthday;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public int getAge(){ return age;}
-
-//    public Date getBirthday(){return birthday;}
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public void setAge(int age) {
         this.age = age;
     }
 
-//    public void setBirthday(Date birthday) {
-//        this.birthday = birthday;
-//    }
+    public int getAge(){ return age;}
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public Date getBirthday(){return birthday;}
 }

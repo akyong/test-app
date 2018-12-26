@@ -22,7 +22,7 @@ public class StudentRepositoryImp implements StudentRepository {
     @PersistenceContext
     private EntityManager entityManager;
     private final ApplicationConfiguration applicationConfiguration;
-    private final static List<String> VALID_PROPERTY_NAMES = Arrays.asList("id", "firstName","lastName","age");
+    private final static List<String> VALID_PROPERTY_NAMES = Arrays.asList("id", "firstName","lastName","age","birthday");
 
     public StudentRepositoryImp(@CurrentSession EntityManager entityManager, ApplicationConfiguration applicationConfiguration) {
         this.entityManager = entityManager;
@@ -31,15 +31,16 @@ public class StudentRepositoryImp implements StudentRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Student> findById(@NotNull Long id) {
-        return Optional.ofNullable(entityManager.find(Student.class, id));
+    public Student findById(@NotNull Long id) {
+        Student student = entityManager.find(Student.class, id);
+        return student;
     }
     //nanti tambahkan findByFirstName, findByLastName, findByAge, findByBirthday
 
     @Override
     @Transactional
-    public Student save(@NotBlank String firstName, @NotBlank String lastName,@Positive int age) {
-        Student student = new Student(firstName,lastName,age);
+    public Student save(@NotBlank String firstName, @NotBlank String lastName,@Positive int age,@NotNull Date birthday) {
+        Student student = new Student(firstName,lastName,age,birthday,new Date(),new Date());
         entityManager.persist(student);
         return student;
     }
@@ -47,20 +48,27 @@ public class StudentRepositoryImp implements StudentRepository {
     @Override
     @Transactional
     public void deleteById(@NotNull Long id) {
-        findById(id).ifPresent(student -> entityManager.remove(student));
+        Student student = entityManager.find(Student.class, id);
+        entityManager.getTransaction().begin();
+        entityManager.remove(student);
+        entityManager.getTransaction().commit();
     }
 
     @Override
     @Transactional
-    public int update(@NotNull Long id, @NotBlank String firstName, @NotBlank String lastName, int age) {
+    public int update(@NotNull Long id, @NotBlank String firstName, @NotBlank String lastName,@Positive int age,@NotNull Date birthday) {
         return entityManager.createQuery(
                 "UPDATE Student g SET firstName = :firstName," +
                         "lastName = :lastName," +
-                        "age = :age " +
+                        "age = :age, " +
+                        "birthday = :birthday, " +
+                        "lastUpdated = :lastUpdated " +
                         "where id = :id")
                 .setParameter("firstName", firstName)
                 .setParameter("lastName", lastName)
                 .setParameter("age", age)
+                .setParameter("birthday", birthday)
+                .setParameter("lastUpdated", new Date())
                 .setParameter("id", id)
                 .executeUpdate();
     }

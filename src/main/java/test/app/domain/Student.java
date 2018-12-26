@@ -2,7 +2,9 @@ package test.app.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.Date;
@@ -14,11 +16,16 @@ import java.util.Set;
 public class Student {
     public Student(){}
 
-    public Student(@NotNull String firstName, @NotNull String lastName, @NotNull int age){
+    public Student(@NotNull String firstName, @NotNull String lastName, @NotNull int age, @NotNull Date birthday, Date dateCreated, @Nullable Date lastUpdated){
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-//        this.birthday = birthday;
+        this.birthday = birthday;
+        this.dateCreated = new Date();
+
+        if(!lastUpdated.equals(null)){
+            this.lastUpdated = new Date();
+        }
     }
 
     @Id
@@ -37,13 +44,19 @@ public class Student {
     @Column(name = "age")
     private int age;
 
-//    @NotNull
-//    @Column(name = "birthday",nullable = false)
-//    private Date birthday;
+    @NotNull
+    @Column(name = "birthday",nullable = false)
+    private Date birthday;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "student")
-    private Set<StudentGroup> studentGroups = new HashSet<>();
+    @Column(name = "date_created")
+    private Date dateCreated;
+
+    @Nullable
+    @Column(name = "last_updated")
+    private Date lastUpdated;
+
+    @OneToOne(cascade =  CascadeType.ALL,mappedBy = "student")
+    private StudentGroup studentGroups;
 
     public Long getId() {
         return id;
@@ -77,20 +90,37 @@ public class Student {
         this.age = age;
     }
 
-//    public Date getBirthday() {
-//        return birthday;
-//    }
-//
-//    public void setBirthday(Date birthday){
-//        this.birthday = birthday;
-//    }
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 
-    public void setStudentGroups(Set<StudentGroup> studentGroups) {
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setStudentGroups(StudentGroup studentGroups) {
         this.studentGroups = studentGroups;
     }
 
-    public Set<StudentGroup> getStudentGroups() {
+    public StudentGroup getStudentGroups() {
         return studentGroups;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    @Nullable
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(@Nullable Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     @Override
@@ -105,9 +135,11 @@ public class Student {
         sb.append(lastName);
         sb.append("', age=");
         sb.append(age);
-//        sb.append(", birthday=");
-//        sb.append(birthday);
-        sb.append("}");
+        sb.append(", birthday=");
+        sb.append(birthday);
+        sb.append("', date_created='");
+        sb.append(dateCreated);
+        sb.append("'}");
         return sb.toString();
     }
 }

@@ -27,8 +27,7 @@ public class StudentController {
     @Get("/{id}")
     public Student show(Long id) {
         return studentRepository
-                .findById(id)
-                .orElse(null);
+                .findById(id);
     }
 
     @Put("/")
@@ -37,8 +36,8 @@ public class StudentController {
                 command.getId(),
                 command.getFirstName(),
                 command.getLastName(),
-                command.getAge()
-//                command.getBirthday()
+                command.getAge(),
+                command.getBirthday()
         );
 
         return HttpResponse
@@ -62,7 +61,8 @@ public class StudentController {
         Student student = studentRepository.save(
                 command.getFirstName(),
                 command.getLastName(),
-                command.getAge()
+                command.getAge(),
+                command.getBirthday()
         );
 
         return HttpResponse

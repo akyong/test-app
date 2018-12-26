@@ -15,22 +15,21 @@ public class StudentUpdateCommand {
     @NotBlank
     private String lastName;
 
-    @NotBlank
     @Positive
     private int age;
 
-//    @NotBlank
-//    private Date birthday;
+    @NotNull
+    private Date birthday;
 
 
     public StudentUpdateCommand() {}
 
-    public StudentUpdateCommand(Long id, String firstName,String lastName, int age) {
+    public StudentUpdateCommand(Long id, String firstName,String lastName, int age, Date birthday) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-//        this.birthday = birthday;
+        this.birthday = birthday;
     }
 
     public Long getId() {
@@ -61,11 +60,11 @@ public class StudentUpdateCommand {
         this.age = age;
     }
 
-//    public Date getBirthday(){
-//        return birthday;
-//    }
+    public Date getBirthday(){
+        return birthday;
+    }
 
-//    public void setBirthday(Date birthday){
-//        this.birthday = birthday;
-//    }
+    public void setBirthday(Date birthday){
+        this.birthday = birthday;
+    }
 }

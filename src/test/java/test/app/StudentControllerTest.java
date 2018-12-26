@@ -68,37 +68,40 @@ public class StudentControllerTest {
     public void testStudentCrudOperations() {
 
         List<Long> studentIds = new ArrayList<>(); //list tampung id
-//        Date skrg = new Date(); //membuat tanggal skrg
+        Date skrg = new Date(); //membuat tanggal skrg
 //
-        HttpRequest request = HttpRequest.POST("/student/create", new StudentSaveCommand("Bobby","S. Kom", 25)); // <3>
-        HttpResponse response = client.toBlocking().exchange(((MutableHttpRequest) request).contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE));
-        studentIds.add(entityId(response));
-        assertEquals(HttpStatus.CREATED, response.getStatus());
-
-        request = HttpRequest.POST("/student/create", new StudentSaveCommand("Akiong","M. Kom",27)); // <3>
-        response = client.toBlocking().exchange(((MutableHttpRequest) request).contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE));
-        assertEquals(HttpStatus.CREATED, response.getStatus());
-        Long id = entityId(response);
-        studentIds.add(id);
+//        HttpRequest request = HttpRequest.POST("/student/create", new StudentSaveCommand("Bobby","S. Kom", 25, skrg)); // <3>
+//        HttpResponse response = client.toBlocking().exchange(((MutableHttpRequest) request).contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+//        studentIds.add(entityId(response));
+//        assertEquals(HttpStatus.CREATED, response.getStatus());
 //
-        request = HttpRequest.GET("/student/"+id);
-        Student student = client.toBlocking().retrieve(request, Student.class); // <4>
-        assertEquals("Akiong", student.getFirstName());
-
-//        request = HttpRequest.PUT("/student", new StudentUpdateCommand(id, "Bobby","S.Kom,M.Kom",28));
-//        response = client.toBlocking().exchange(request);  // <5>
+//        request = HttpRequest.POST("/student/create", new StudentSaveCommand("Akiong","M. Kom",27, skrg)); // <3>
+//        response = client.toBlocking().exchange(((MutableHttpRequest) request).contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+//        assertEquals(HttpStatus.CREATED, response.getStatus());
+//        Long id = entityId(response);
+//        studentIds.add(id);
+////
+//        request = HttpRequest.GET("/student/"+id);
+//        Student student = client.toBlocking().retrieve(request, Student.class); // <4>
+//        assertEquals("Akiong", student.getFirstName());
 //
+//        request = HttpRequest.PUT("/student", new StudentUpdateCommand(id, "Bobby","S.Kom,M.Kom",28, skrg));
+//        response = client.toBlocking().exchange(request);  // <5> update
 //        assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
 //
-//        request = HttpRequest.GET("/student/" + id);
-//        student = client.toBlocking().retrieve(request, Student.class);
-//        assertEquals("Bobby", student.getFirstName());
+////        request = HttpRequest.GET("/student/" + id);
+////        student = client.toBlocking().retrieve(request, Student.class);
+////        assertEquals("Bobby", student.getFirstName());
 //
 //        request = HttpRequest.GET("/student/list");
 //        List<Student> students = client.toBlocking().retrieve(request, Argument.of(List.class, Student.class));
-//
 //        assertEquals(2, students.size());
 //
+
+        HttpRequest request = HttpRequest.PUT("/student", new StudentUpdateCommand((long) 8,"Jeni","S.Kom, M.Kom",28, skrg));
+        HttpResponse response = client.toBlocking().exchange(request);  // <5> update
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
+
 //        request = HttpRequest.GET("/student/list?max=1");
 //        students = client.toBlocking().retrieve(request, Argument.of(List.class, Student.class));
 //
